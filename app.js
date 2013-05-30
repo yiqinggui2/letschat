@@ -56,7 +56,9 @@ app.get('/chatroom', function(req, res) {
 });
 
 app.get('/createnewroom', function(req, res) {
-	res.cookie('roomnumber', util.genRoomAccessCode(), { signed: true });
+	/* un comment the following line to support multiple rooms*/
+	//res.cookie('roomnumber', util.genRoomAccessCode(), { signed: true });
+	res.cookie('roomnumber', 'AAAAAAAAAA', { signed: true });
 	res.redirect('/chatroom');
 });
 
