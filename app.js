@@ -67,6 +67,7 @@ io.configure(function (){
 		var roomnumber = decrypted_cookie['roomnumber'];
 		if (roomnumber) {
 			//roomnumber is verified, open a connection
+			console.log('roomnumber: ' + roomnumber);
 			callback(null, true);
 		}
 		else {
