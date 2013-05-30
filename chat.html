@@ -13,7 +13,7 @@
 			var global_nickname;
 		
 			function startChatting(user_nickname) {
-				socket = io.connect('http://localhost');
+				socket = io.connect('/');
 		     	socket.on('set nickname', function (data) {
 		       	  	socket.emit('set nickname', { nickname: user_nickname });
 		     	});
