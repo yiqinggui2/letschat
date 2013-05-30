@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<title>Evil Page - Test Purpose</title>
+		<script src="/javascripts/jquery-1.10.0.min.js"></script>
+		<script src="/javascripts/bootstrap.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			socket = io.connect('http://localhost');
+			
+			socket.on('error', function (reason){
+			  console.error('Unable to connect Socket.IO', reason);
+			});
+
+			socket.on('connect', function (){
+			  console.info('successfully established a working connection \o/');
+			});
+			
+     		socket.on('set nickname', function (data) {
+       	  		socket.emit('set nickname', { nickname: 'sdadas' });
+     		});
+	
+		</script>
+	</head>
+
+	<body>
+
+	</body>
+
+</html>
+

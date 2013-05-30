@@ -1,0 +1,52 @@
+div#outer_container {
+	width: 942px;
+	margin: 20px auto;
+	//border:1px dashed orange;
+
+}
+
+h3#big_title {
+	text-align:center;
+	color: gray;
+}
+
+.span12{
+	//border:1px dashed orange;
+	
+}
+
+.span3 {
+	//border:1px dashed orange;
+	width:150px;
+}
+
+.span9 {
+	//border:1px dashed orange;
+	width:750px;
+}
+
+textarea#show_chat_content {
+	width:740;
+}
+
+#welcome_section{
+	color: gray;
+}
+
+#msg{
+	width:680;
+	height:40px;
+	margin-top:10px;
+}
+
+#user_nickname{
+	height:30px;
+}
+
+button#sendmsg_btn{
+	height:40;
+}
+
+.not_shown{
+	display:none;
+}

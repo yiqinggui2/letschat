@@ -1,0 +1,148 @@
+<html>
+
+	<head>
+		<title>Let's Chat!</title>
+		<link href="/stylesheets/bootstrap.min.css" rel="stylesheet" />
+		<link href="/stylesheets/chatmainpage.css" rel="stylesheet" />
+		<script src="/javascripts/jquery-1.10.0.min.js"></script>
+		<script src="/javascripts/bootstrap.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+		
+		<script>
+			var socket;
+			var global_nickname;
+		
+			function startChatting(user_nickname) {
+				socket = io.connect('http://localhost');
+		     	socket.on('set nickname', function (data) {
+		       	  	socket.emit('set nickname', { nickname: user_nickname });
+		     	});
+		     	socket.on('receive msg', function (received_msg) {
+		       	  	//console.log('msg_received: ' + received_msg['msgcontent']);
+					addMsgToChatBox(received_msg['msgcontent']);
+		     	});
+		     	socket.on('system_msg', function (received_msg) {
+		       	  	//console.log('msg_received: ' + received_msg['msgcontent']);
+					addMsgToChatBox('[SYSTEM MESSAGE]: ' + received_msg['msgcontent']);
+		     	});			
+			}
+			
+			function addMsgToChatBox(new_msg) {
+				var old_msg = document.getElementById('show_chat_content').value;
+				if(old_msg == '')
+					var curr_msg = new_msg;
+				else
+					var curr_msg = old_msg + '\n' + new_msg;					
+				document.getElementById('show_chat_content').value = curr_msg;
+			}
+			
+			$(document).ready(function() {
+				$('#input_name_modal').modal({
+				  	keyboard: false,
+					backdrop: "static"
+				})
+				$('#input_name_modal').modal('show');
+			});
+			
+			function startChattingWrapper() {
+				var user_nickname = document.getElementById("user_nickname").value;
+				global_nickname = user_nickname;
+				if(user_nickname != "") {
+					startChatting(user_nickname);
+					document.getElementById("welcome_section").innerHTML = "How are you doing, " + user_nickname + " ?";
+					$('#input_name_modal').modal('hide');
+				}
+				else {
+					document.getElementById('nickname_error').innerHTML = 'Hey dude, you got to have a name.';
+				}
+
+			}
+			
+			function sendMsg(user_msg) {
+				socket.emit('send msg', { msg_content: user_msg});
+			}
+			
+			function sendMsgWeapper() {
+				if(document.getElementById('msg').value != "") {
+					sendMsg(document.getElementById('msg').value);
+					var new_msg = global_nickname + " says: " + document.getElementById('msg').value;
+					addMsgToChatBox(new_msg);
+					document.getElementById('msg').value = "";					
+				}
+				else {
+					;
+				}
+
+			}
+		</script>
+		
+	</head>
+	
+	<body>
+		<div id="outer_container">
+			<div id="header">
+			</div>
+			
+			<div id="main">
+				<div class="row">
+					<div class="span12">
+						<h3 id="big_title">Let's Chat !!!</h3>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="span3">
+						<p>menu section</p>
+					</div>
+					<div class="span9">
+						<h4 id="welcome_section"></h4>
+						<div class="row">
+							<div class="span9">
+								<!--Textarea showing the content of the chat-->
+								<textarea rows="20"  id="show_chat_content"></textarea>
+							</div>
+						</div>
+						<div class="row">
+							<div class="span9">
+								<form action="\sendmsg" id="sendmsg_form">
+									<!--A text input for typing message -->
+									<input type="text" name="msg" id="msg" />
+									<button class="btn btn-warning" type="button" id="sendmsg_btn" height="30px;"
+										 onclick="sendMsgWeapper();">Send</button>
+							</div>
+						</div>
+					</div>
+			</div>
+			
+			<!--
+			<button class="btn btn-warning" type="button" id="sendmsg_btn" height="30px;" onclick="addMsgToChatBox('new msg');">Test</button>
+			-->
+			
+			<div id="footer">
+			</div>
+			
+
+			<!-- Modal -->
+			<div id="input_name_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  	<div class="modal-header">
+			    	<!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>-->
+			    <h5 id="myModalLabel">Your name please before chatting!</h5>
+				</div>
+			  	<div class="modal-body">
+			    	<input type="text" id="user_nickname" />
+					<p id="nickname_error"></p>
+			  	</div>
+			  	<div class="modal-footer">
+			    	<input type="button" class="btn btn-primary" onclick="startChattingWrapper();" value="Start Chatting" />
+			  	</div>
+			</div>
+			<!-- Button to trigger modal -->
+			<a href="#input_name_modal" role="button" class="btn not_shown" data-toggle="modal">You should not see this btn</a>
+			
+		</div>
+	</body>		
+	
+</html>
+	
+	
+		
